@@ -7,42 +7,42 @@ namespace ReservaLaboratorioWilbertMartin.Repository
     public class MonitoresRepository(AppDbContext context) : AdministradorRepository
     {
         private readonly AppDbContext _context = context;
-        public async Task ActualizarAsync(Administrador monitor)
+        public async Task ActualizarAsync(Administrador admi)
         {
-            _context.MonitorLab.Update(monitor);
+            _context.Administrador.Update(admi);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Administrador> AgregarAsync(Administrador monitor)
+        public async Task<Administrador> AgregarAsync(Administrador admi)
         {
-            await _context.MonitorLab.AddAsync(monitor);
+            await _context.Administrador.AddAsync(admi);
             await _context.SaveChangesAsync();
-            return monitor;
+            return admi;
         }
 
         public async Task EliminarAsync(int id)
         {
-            var monitor = await _context.MonitorLab.FindAsync(id);
-            if (monitor != null)
+            var admi = await _context.Administrador.FindAsync(id);
+            if (admi != null)
             {
-                _context.MonitorLab.Remove(monitor);
+                _context.Administrador.Remove(admi);
                 await _context.SaveChangesAsync();
             }
         }
 
         public async Task<Administrador?> ObtenerPorIdAsync(int id)
         {
-            return await _context.MonitorLab.Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Administrador.Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task<Administrador?> ObtenerPorUserIdAsync(int userId)
         {
-            return await _context.MonitorLab.Include(m => m.User).FirstOrDefaultAsync(m => m.UserId == userId);
+            return await _context.Administrador.Include(m => m.User).FirstOrDefaultAsync(m => m.UserId == userId);
         }
 
         public async Task<IEnumerable<Administrador>> ObtenerTodosAsync()
         {
-            return await _context.MonitorLab.Include(m => m.User).ToListAsync();
+            return await _context.Administrador.Include(m => m.User).ToListAsync();
         }
     }
 }

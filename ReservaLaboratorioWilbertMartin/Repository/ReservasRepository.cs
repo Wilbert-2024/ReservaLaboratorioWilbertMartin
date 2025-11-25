@@ -71,7 +71,7 @@ namespace ReservaLaboratorioWilbertMartin.Repository
         public async Task<IEnumerable<ReservaLaboratorio>> ObtenerTodasAsync()
         {
             return await _context.ReservasLaboratorio.Include(r => r.Docente).ThenInclude(d => d.User).Include(r => r.Laboratorio)
-                 .Include(r => r.MonitorLab).ThenInclude(m => m.User).ToListAsync();
+                 .Include(r => r.Administrador).ThenInclude(m => m.User).ToListAsync();
 
         }
     }
