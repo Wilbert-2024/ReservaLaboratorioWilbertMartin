@@ -38,7 +38,7 @@ namespace ReservaLaboratorioWilbertMartin.Repository
 
         public async Task<Docente?> ObtenerPorUserIdAsync(int userId)
         {
-                     
+            return await _context.Docentes.Include(d => d.User).FirstOrDefaultAsync(d => d.UserId == userId);
         }
 
         public async Task<IEnumerable<Docente>> ObtenerTodosAsync()

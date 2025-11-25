@@ -34,19 +34,16 @@ namespace ReservaLaboratorioWilbertMartin.Repository
         public async Task<bool> ExisteReservaSolapadaAsync(ReservaLaboratorio nuevaReserva)
         {
             return await _context.ReservasLaboratorio
-                 .AnyAsync(r =>  r.LaboratorioId == nuevaReserva.LaboratorioId &&  r.Fecha.Date == nuevaReserva.Fecha.Date &&
-                     r.Estado == "Aprobada" &&  r.Id != nuevaReserva.Id &&
-                     (
-                         (nuevaReserva.HoraInicio >= r.HoraInicio && nuevaReserva.HoraInicio < r.HoraFin) ||
-                         (nuevaReserva.HoraFin > r.HoraInicio && nuevaReserva.HoraFin <= r.HoraFin) ||
-                         (nuevaReserva.HoraInicio <= r.HoraInicio && nuevaReserva.HoraFin >= r.HoraFin)
-                     )
-                 );
+                     .AnyAsync(r => r.LaboratorioId == nuevaReserva.LaboratorioId &&
+                                   r.Fecha.Date == nuevaReserva.Fecha.Date &&
+                                   r.Estado == "Aprobada" &&  r.HoraReserva == nuevaReserva.HoraReserva &&
+
+                                   r.Id != nuevaReserva.Id);
         }
 
         public async Task<ReservaLaboratorio?> ObtenerConDetallesAsync(int id)
         {
-            return await _context.ReservasLaboratorio.Include(r => r.Docente).ThenInclude(d => d.User).Include(r => r.Laboratorio).Include(r => r.MonitorLab).ThenInclude(m => m.User).FirstOrDefaultAsync(r => r.Id == id);
+            return await _context.ReservasLaboratorio.Include(r => r.Docente).ThenInclude(d => d.User).Include(r => r.Laboratorio).Include(r => r.Administrador).ThenInclude(m => m.User).FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<IEnumerable<ReservaLaboratorio>> ObtenerPendientesAsync()
@@ -60,7 +57,11 @@ namespace ReservaLaboratorioWilbertMartin.Repository
 
         public async Task<IEnumerable<ReservaLaboratorio>> ObtenerPorDocenteIdAsync(int docenteId)
         {
-            return await _context.ReservasLaboratorio.Where(r => r.Estado == "Pendiente").Include(r => r.Docente).ThenInclude(d => d.User).Include(r => r.Laboratorio).ToListAsync();
+            return await _context.ReservasLaboratorio
+                   .Where(r => r.DocenteId == docenteId)
+                   .Include(r => r.Docente).ThenInclude(d => d.User)
+                   .Include(r => r.Laboratorio)
+                   .ToListAsync();
         }
 
         public async Task<ReservaLaboratorio?> ObtenerPorIdAsync(int id)

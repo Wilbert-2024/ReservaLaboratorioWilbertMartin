@@ -6,8 +6,8 @@ namespace ReservaLaboratorioWilbertMartin.Data
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
         // DbSets existentes
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Role> roles { get; set; }
+        public DbSet<User> users { get; set; }
 
         // Nuevos DbSets
         public DbSet<Docente> Docentes { get; set; }

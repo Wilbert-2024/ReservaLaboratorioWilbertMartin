@@ -18,7 +18,7 @@ namespace ReservaLaboratorioWilbertMartin.Models
         public virtual Laboratorio Laboratorio { get; set; }
 
         public DateTime Fecha { get; set; }
-        public TimeSpan HoraReserva { get; set; }
+        public string HoraReserva { get; set; }
 
         public string Motivo { get; set; }
 
