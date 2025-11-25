@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ReservaLaboratorioWilbertMartin.Models
 {
     [Table("Monitores")]
-    public class Monitor
+    public class MonitorLab
     {
         [Key]
         public int Id { get; set; }

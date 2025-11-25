@@ -27,6 +27,6 @@ namespace ReservaLaboratorioWilbertMartin.Models
 
         [ForeignKey("Monitor")]
         public int? MonitorId { get; set; }
-        public virtual Monitor Monitor { get; set; }
+        public virtual MonitorLab MonitorLab { get; set; }
     }
 }
