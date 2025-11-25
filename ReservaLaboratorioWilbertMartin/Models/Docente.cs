@@ -14,7 +14,7 @@ namespace ReservaLaboratorioWilbertMartin.Models
 
         public virtual User User { get; set; }
 
-        public string Especialidad { get; set; }
+        public string Asignatura { get; set; }
 
 
         // Relación con reservas

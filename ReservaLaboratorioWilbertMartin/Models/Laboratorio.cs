@@ -15,8 +15,6 @@ namespace ReservaLaboratorioWilbertMartin.Models
 
         public int Capacidad { get; set; }
 
-        public string Ubicacion { get; set; }
-
         public ICollection<ReservaLaboratorio> Reservas { get; set; } = new List<ReservaLaboratorio>();
 
     }

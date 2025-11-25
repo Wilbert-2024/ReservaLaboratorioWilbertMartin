@@ -18,15 +18,14 @@ namespace ReservaLaboratorioWilbertMartin.Models
         public virtual Laboratorio Laboratorio { get; set; }
 
         public DateTime Fecha { get; set; }
-        public TimeSpan HoraInicio { get; set; }
-        public TimeSpan HoraFin { get; set; }
+        public TimeSpan HoraReserva { get; set; }
 
         public string Motivo { get; set; }
 
         public string Estado { get; set; } = "Pendiente"; // Pendiente, Aprobada, Rechazada
 
-        [ForeignKey("Monitor")]
-        public int? MonitorId { get; set; }
-        public virtual MonitorLab MonitorLab { get; set; }
+        [ForeignKey("Administrador")]
+        public int? AdministradorId { get; set; }
+        public virtual Administrador Administrador { get; set; }
     }
 }

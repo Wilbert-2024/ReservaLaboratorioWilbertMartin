@@ -4,16 +4,16 @@ using ReservaLaboratorioWilbertMartin.Models;
 
 namespace ReservaLaboratorioWilbertMartin.Repository
 {
-    public class MonitoresRepository(AppDbContext context) : IMonitoresRepository
+    public class MonitoresRepository(AppDbContext context) : AdministradorRepository
     {
         private readonly AppDbContext _context = context;
-        public async Task ActualizarAsync(MonitorLab monitor)
+        public async Task ActualizarAsync(Administrador monitor)
         {
             _context.MonitorLab.Update(monitor);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<MonitorLab> AgregarAsync(MonitorLab monitor)
+        public async Task<Administrador> AgregarAsync(Administrador monitor)
         {
             await _context.MonitorLab.AddAsync(monitor);
             await _context.SaveChangesAsync();
@@ -30,17 +30,17 @@ namespace ReservaLaboratorioWilbertMartin.Repository
             }
         }
 
-        public async Task<MonitorLab?> ObtenerPorIdAsync(int id)
+        public async Task<Administrador?> ObtenerPorIdAsync(int id)
         {
             return await _context.MonitorLab.Include(m => m.User).FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<MonitorLab?> ObtenerPorUserIdAsync(int userId)
+        public async Task<Administrador?> ObtenerPorUserIdAsync(int userId)
         {
             return await _context.MonitorLab.Include(m => m.User).FirstOrDefaultAsync(m => m.UserId == userId);
         }
 
-        public async Task<IEnumerable<MonitorLab>> ObtenerTodosAsync()
+        public async Task<IEnumerable<Administrador>> ObtenerTodosAsync()
         {
             return await _context.MonitorLab.Include(m => m.User).ToListAsync();
         }

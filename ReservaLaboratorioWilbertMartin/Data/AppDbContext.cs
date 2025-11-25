@@ -11,7 +11,7 @@ namespace ReservaLaboratorioWilbertMartin.Data
 
         // Nuevos DbSets
         public DbSet<Docente> Docentes { get; set; }
-        public DbSet<MonitorLab> MonitorLab { get; set; }
+        public DbSet<Administrador> Administrador { get; set; }
         public DbSet<Laboratorio> Laboratorios { get; set; }
         public DbSet<ReservaLaboratorio> ReservasLaboratorio { get; set; }
 
@@ -27,12 +27,12 @@ namespace ReservaLaboratorioWilbertMartin.Data
             modelBuilder.Entity<Docente>().HasOne(d => d.User).WithOne().HasForeignKey<Docente>(d => d.UserId).OnDelete(DeleteBehavior.Cascade);
 
 
-            modelBuilder.Entity<MonitorLab>().HasOne(m => m.User).WithOne().HasForeignKey<MonitorLab>(m => m.UserId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Administrador>().HasOne(m => m.User).WithOne().HasForeignKey<Administrador>(m => m.UserId).OnDelete(DeleteBehavior.Cascade);
 
 
             modelBuilder.Entity<ReservaLaboratorio>().HasOne(r => r.Docente).WithMany(d => d.Reservas).HasForeignKey(r => r.DocenteId).OnDelete(DeleteBehavior.Cascade);
         
-            modelBuilder.Entity<ReservaLaboratorio>().HasOne(r => r.MonitorLab).WithMany(m => m.ReservasAprobadas).HasForeignKey(r => r.MonitorId).OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<ReservaLaboratorio>().HasOne(r => r.Administrador).WithMany(m => m.ReservasAprobadas).HasForeignKey(r => r.Administrador).OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<ReservaLaboratorio>() .HasOne(r => r.Laboratorio) .WithMany(l => l.Reservas).HasForeignKey(r => r.LaboratorioId).OnDelete(DeleteBehavior.Cascade);
 
