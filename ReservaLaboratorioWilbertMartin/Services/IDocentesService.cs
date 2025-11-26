@@ -1,6 +1,6 @@
 ﻿using ReservaLaboratorioWilbertMartin.Models;
 
-namespace ReservaLaboratorioWilbertMartin.Service
+namespace ReservaLaboratorioWilbertMartin.Services
 {
     public interface IDocentesService
     {

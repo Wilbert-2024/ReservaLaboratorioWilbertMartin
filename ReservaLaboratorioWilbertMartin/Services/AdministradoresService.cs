@@ -1,6 +1,6 @@
 ﻿using ReservaLaboratorioWilbertMartin.Models;
 using ReservaLaboratorioWilbertMartin.Repository;
-using ReservaLaboratorioWilbertMartin.Service;
+using ReservaLaboratorioWilbertMartin.Services;
 
 namespace ReservaLaboratorioWilbertMartin.Services
 {

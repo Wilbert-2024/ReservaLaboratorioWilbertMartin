@@ -5,8 +5,6 @@ using ReservaLaboratorioWilbertMartin.Data;
 using ReservaLaboratorioWilbertMartin.MappingProfiles;
 using ReservaLaboratorioWilbertMartin.Middleware;
 using ReservaLaboratorioWilbertMartin.Models.Settings;
-using ReservaLaboratorioWilbertMartin.Repository;
-using ReservaLaboratorioWilbertMartin.Service;
 using ReservaLaboratorioWilbertMartin.Services;
 using System.Text;
 
@@ -27,13 +25,28 @@ builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(UserProfile).Assembly))
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionBD")));
 
-// Inyección de dependencias
+
+// =================== REPOSITORIOS ======================
+//builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
+//builder.Services.AddScoped<IDocentesRepository, DocentesRepository>();
+//builder.Services.AddScoped<ILaboratoriosRepository, LaboratoriosRepository>();
+//builder.Services.AddScoped<IReservasRepository, ReservasRepository>();
+//builder.Services.AddScoped<IRolesRepository, RolesRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+// =================== SERVICIOS ==========================
 builder.Services.AddScoped<IAdministradoresService, AdministradoresService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDocentesService, DocentesService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ILaboratoriosService, LaboratoriosService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+
+
+
+
 
 // Sesiones y cookies
 builder.Services.AddSession(options =>
