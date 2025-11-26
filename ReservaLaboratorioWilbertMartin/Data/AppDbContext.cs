@@ -22,7 +22,7 @@ namespace ReservaLaboratorioWilbertMartin.Data
 
 
             modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "Admin" }, new Role { Id = 2, Name = "Usuario" });
-
+            
             //un docente tiene un user y un user tiene un docente, la columna que los une es la UserId en la tabla docente
             modelBuilder.Entity<Docente>().HasOne(d => d.User).WithOne().HasForeignKey<Docente>(d => d.UserId).OnDelete(DeleteBehavior.Cascade);
 
@@ -30,11 +30,15 @@ namespace ReservaLaboratorioWilbertMartin.Data
 
             modelBuilder.Entity<ReservaLaboratorio>().HasOne(r => r.Docente).WithMany(d => d.Reservas).HasForeignKey(r => r.DocenteId).OnDelete(DeleteBehavior.Cascade);
         
-            modelBuilder.Entity<ReservaLaboratorio>().HasOne(r => r.Administrador).WithMany(m => m.ReservasAprobadas).HasForeignKey(r => r.Administrador).OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<ReservaLaboratorio>()
+    .HasOne(r => r.Administrador)
+    .WithMany(m => m.ReservasAprobadas)
+    .HasForeignKey(r => r.AdministradorId)  // ✅ Referencia correcta
+    .OnDelete(DeleteBehavior.SetNull);      // ✅ Comportamiento correcto
 
             modelBuilder.Entity<ReservaLaboratorio>() .HasOne(r => r.Laboratorio) .WithMany(l => l.Reservas).HasForeignKey(r => r.LaboratorioId).OnDelete(DeleteBehavior.Cascade);
 
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); 
         }
     }
 

@@ -25,12 +25,12 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             throw new Exception("ID de usuario no encontrado en el token de autenticación.");
         }
 
-        #region VISTAS (MVC)
+
 
 
         /// Muestra la página de detalles de una reserva específica.
         /// Accesible para usuarios autenticados (Docentes y Admins).
- 
+
         /// <param name="id">El ID de la reserva a visualizar.</param>
         [HttpGet]
         [Authorize]
@@ -63,9 +63,9 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             return View(reserva);
         }
 
-        #endregion
 
-        #region API ENDPOINTS
+
+      
 
         /// <summary>
         /// Obtiene los detalles de una reserva específica en formato JSON (API Endpoint).
@@ -130,6 +130,6 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             }
         }
 
-        #endregion
-    }
+
+    } 
 }

@@ -5,6 +5,7 @@ using ReservaLaboratorioWilbertMartin.Data;
 using ReservaLaboratorioWilbertMartin.MappingProfiles;
 using ReservaLaboratorioWilbertMartin.Middleware;
 using ReservaLaboratorioWilbertMartin.Models.Settings;
+using ReservaLaboratorioWilbertMartin.Repository;
 using ReservaLaboratorioWilbertMartin.Services;
 using System.Text;
 
@@ -27,13 +28,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 // =================== REPOSITORIOS ======================
-//builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
-//builder.Services.AddScoped<IDocentesRepository, DocentesRepository>();
-//builder.Services.AddScoped<ILaboratoriosRepository, LaboratoriosRepository>();
-//builder.Services.AddScoped<IReservasRepository, ReservasRepository>();
-//builder.Services.AddScoped<IRolesRepository, RolesRepository>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
+builder.Services.AddScoped<IDocentesRepository, DocentesRepository>();
+builder.Services.AddScoped<ILaboratoriosRepository, LaboratoriosRepository>();
+builder.Services.AddScoped<IReservasRepository, ReservasRepository>();
+builder.Services.AddScoped<IRolesRepository, RolesRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 
 // =================== SERVICIOS ==========================
 builder.Services.AddScoped<IAdministradoresService, AdministradoresService>();
