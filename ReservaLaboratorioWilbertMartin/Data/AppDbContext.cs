@@ -26,9 +26,7 @@ namespace ReservaLaboratorioWilbertMartin.Data
             //un docente tiene un user y un user tiene un docente, la columna que los une es la UserId en la tabla docente
             modelBuilder.Entity<Docente>().HasOne(d => d.User).WithOne().HasForeignKey<Docente>(d => d.UserId).OnDelete(DeleteBehavior.Cascade);
 
-
             modelBuilder.Entity<Administrador>().HasOne(m => m.User).WithOne().HasForeignKey<Administrador>(m => m.UserId).OnDelete(DeleteBehavior.Cascade);
-
 
             modelBuilder.Entity<ReservaLaboratorio>().HasOne(r => r.Docente).WithMany(d => d.Reservas).HasForeignKey(r => r.DocenteId).OnDelete(DeleteBehavior.Cascade);
         

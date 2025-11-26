@@ -1,10 +1,12 @@
-using ReservaLaboratorioWilbertMartin.MappingProfiles;
-using ReservaLaboratorioWilbertMartin.Models.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ReservaLaboratorioWilbertMartin.Data;
+using ReservaLaboratorioWilbertMartin.MappingProfiles;
+using ReservaLaboratorioWilbertMartin.Middleware;
+using ReservaLaboratorioWilbertMartin.Models.Settings;
 using ReservaLaboratorioWilbertMartin.Repository;
+using ReservaLaboratorioWilbertMartin.Service;
 using ReservaLaboratorioWilbertMartin.Services;
 using System.Text;
 
@@ -26,10 +28,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexionBD")));
 
 // Inyección de dependencias
-builder.Services.AddScoped<AuthService, AuthService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAdministradoresService, AdministradoresService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDocentesService, DocentesService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ILaboratoriosService, LaboratoriosService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Sesiones y cookies
 builder.Services.AddSession(options =>
@@ -116,14 +120,47 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Redirecciones HTTPS y archivos estáticos
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
+// Routing
 app.UseRouting();
 
+// Sesión, autenticación y autorización
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Middleware personalizado para JWT refresh
+app.UseMiddleware<JwtRefreshMiddleware>();
+
+
+// Middleware para mejorar redirecciones de autenticación
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == 401 && !context.Response.HasStarted)
+    {
+        Console.WriteLine("Redireccionando a login ... ");
+        context.Response.Redirect($"/Auth/Login?returnUrl={context.Request.Path}");
+    }
+    else if (context.Response.StatusCode == 403 && !context.Response.HasStarted)
+    {
+        context.Response.Redirect("/Auth/AccessDenied");
+    }
+});
+
+// Archivos estáticos adicionales si los necesitas
 app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+
+// Rutas por defecto
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
+
+//app.MapRazorPages()
+  // .WithStaticAssets();
 
 app.Run();
