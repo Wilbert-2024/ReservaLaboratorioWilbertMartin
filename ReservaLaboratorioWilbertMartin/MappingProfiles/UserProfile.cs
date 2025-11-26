@@ -2,7 +2,7 @@
 using ReservaLaboratorioWilbertMartin.Dtos;
 using ReservaLaboratorioWilbertMartin.Models;
 
-namespace MartinWilbert.MappingProfiles
+namespace ReservaLaboratorioWilbertMartin.MappingProfiles
 {
     public class UserProfile:Profile
     {

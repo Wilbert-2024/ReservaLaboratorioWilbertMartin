@@ -1,5 +1,5 @@
-using MartinWilbert.MappingProfiles;
-using MartinWilbert.Models.Settings;
+using ReservaLaboratorioWilbertMartin.MappingProfiles;
+using ReservaLaboratorioWilbertMartin.Models.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
