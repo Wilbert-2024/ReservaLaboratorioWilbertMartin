@@ -8,7 +8,6 @@ namespace MartinWilbert.MappingProfiles
     {
         public UserProfile()
         {
-
             CreateMap<User, LoginResponseDto>()
             .ForMember(dest => dest.AccesToken, opt => opt.Ignore())
             .ForMember(dest => dest.RefreshToken, opt => opt.Ignore())
@@ -23,7 +22,6 @@ namespace MartinWilbert.MappingProfiles
             .ForMember(dest => dest.PasswordResetToken, opt => opt.Ignore())
             .ForMember(dest => dest.ResetTokenExpiryTime, opt => opt.Ignore())
             .ForMember(dest => dest.Role, opt => opt.Ignore());
-
         }
 
     }
