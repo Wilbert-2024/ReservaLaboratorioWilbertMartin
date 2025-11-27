@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     setTimeout(() => {
-                        window.location.href = '/Home/Index';
+                        window.location.href = '/Home/UserEntrada';
                     }, 2000);
                 } else {
                     Swal.fire({

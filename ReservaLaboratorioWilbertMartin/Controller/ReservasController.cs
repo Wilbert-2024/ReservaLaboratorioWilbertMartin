@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReservaLaboratorioWilbertMartin.Dtos;
 using ReservaLaboratorioWilbertMartin.Models;
 using ReservaLaboratorioWilbertMartin.Repository;
 using System.Security.Claims;
@@ -9,9 +10,11 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
     // Este controlador maneja la visualización de reservas.
     // Los usuarios autenticados (Docentes y Admins) pueden ver detalles.
     // Solo los Admins pueden ver la lista completa de todas las reservas.
-    public class ReservasController(IReservasRepository reservasRepository) : Controller
+    public class ReservasController(IReservasRepository reservasRepository, ILaboratoriosRepository laboratoriosRepository) : Controller
     {
         private readonly IReservasRepository _reservasRepository = reservasRepository;
+        private readonly ILaboratoriosRepository _laboratoriosRepository = laboratoriosRepository;
+
 
         /// Método de ayuda para obtener el ID del usuario autenticado desde el token JWT.
 
@@ -127,6 +130,51 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             {
                 // Loguear el error ex aquí
                 return StatusCode(500, new { success = false, errorMessage = "Ocurrió un error al obtener las reservas." });
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> CrearReserva([FromBody] ReservaRequestDto dto)
+        {
+
+            try
+            {
+                // Obtener el ID del usuario autenticado
+                var userId = GetCurrentUserId();
+
+                string dia = dto.Fecha.ToString("dddd", new System.Globalization.CultureInfo("es-ES"));
+
+
+                // Verificar si el laboratorio está disponible en ese horario
+                var disponible = await _laboratoriosRepository.EstaDisponibleAsync(dto.LaboratorioId, dia, dto.HoraReserva);
+                if (!disponible)
+                {
+                    return Json(new { success = false, message = "El laboratorio no está disponible en el horario seleccionado" });
+                }
+
+                // Crear la reserva
+                var reserva = new ReservaLaboratorio
+                {
+                    UserId = userId,
+                    LaboratorioId = dto.LaboratorioId,
+                    Fecha = dto.Fecha,
+                    HoraReserva = dto.HoraReserva,
+                    Motivo = dto.Motivo,
+                    Estado = "Pendiente" // Estado inicial
+                };
+
+                // Guardar en la base de datos usando el repositorio
+                await _reservasRepository.AgregarAsync(reserva);
+
+                return Json(new { success = true, message = "Reserva creada exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                // Aquí podrías loguear el error
+                return Json(new { success = false, message = "Ocurrió un error al procesar la reserva" });
             }
         }
 

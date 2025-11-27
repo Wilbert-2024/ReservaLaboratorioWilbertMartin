@@ -1,10 +1,7 @@
-
 function goToReservation() {
-    // Redirigir a la página de reservas
-    window.location.href = 'reservas.html';
+    window.location.href = urls.reservarLab;
 }
 
 function goToConsultas() {
-    // Redirigir a la página de consultas
-    window.location.href = 'consultas.html';
+    window.location.href = urls.consultasDoc;
 }

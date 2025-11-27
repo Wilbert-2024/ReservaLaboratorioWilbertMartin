@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ReservaLaboratorioWilbertMartin.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class ref1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,10 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Capacidad = table.Column<int>(type: "int", nullable: false)
+                    Capacidad = table.Column<int>(type: "int", nullable: false),
+                    dias_ocupado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    horas_ocupado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    direccion = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

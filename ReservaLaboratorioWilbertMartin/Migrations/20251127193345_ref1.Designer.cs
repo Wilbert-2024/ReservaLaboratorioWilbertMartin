@@ -12,8 +12,8 @@ using ReservaLaboratorioWilbertMartin.Data;
 namespace ReservaLaboratorioWilbertMartin.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251127022303_mi")]
-    partial class mi
+    [Migration("20251127193345_ref1")]
+    partial class ref1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,18 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("dias_ocupado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("direccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("horas_ocupado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

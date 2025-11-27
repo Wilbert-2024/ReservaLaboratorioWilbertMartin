@@ -13,6 +13,13 @@ namespace ReservaLaboratorioWilbertMartin.Models
 
         public int Capacidad { get; set; }
 
+        public string dias_ocupado { get; set; }
+
+        public string horas_ocupado { get; set; }
+
+        public string direccion { get; set; }
+
+
         public ICollection<ReservaLaboratorio> Reservas { get; set; } 
 
     }

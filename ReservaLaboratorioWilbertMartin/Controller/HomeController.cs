@@ -23,6 +23,14 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             return View();
         }
 
+        public IActionResult UserEntrada() { return View(); }
+
+        public IActionResult ConsultasDoc() { return View(); }
+
+        public IActionResult ReservarLab() { return View();  }
+
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

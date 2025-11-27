@@ -8,6 +8,9 @@ const workingSlots = [
     '19:45-21:15'
 ];
 
+// MENSAJE PARA VERIFICAR QUE LLEGÓ AQUÍ
+console.log('=== DATOS PREPARADOS PARA ENVIAR ===');
+
 // Base de datos de horarios ocupados
 const occupiedSchedules = {
     // Lunes
@@ -129,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target === reservationModal) closeReservationModal();
     });
 
+    // Conectar el formulario con la función handleFormSubmit
     reservationForm.addEventListener('submit', handleFormSubmit);
 
     // Actualizar estado inicial
@@ -136,6 +140,92 @@ document.addEventListener('DOMContentLoaded', function () {
     updateAllLabsStatus();
 });
 
+function handleFormSubmit(e) {
+    e.preventDefault();
+
+    const motivos = document.getElementById('motivos').value.trim();
+    if (!motivos) {
+        showToast('Error', 'Por favor describe el motivo de la reserva', 'error');
+        return;
+    }
+
+    // Obtener la fecha seleccionada
+    const dateInput = document.getElementById('globalDate');
+    const selectedDate = dateInput.value;
+
+    // Obtener el horario seleccionado (solo la hora de inicio)
+    const selectedStartTime = selectedGlobalTime.split('-')[0];
+
+    // Datos para enviar al servidor
+    const reservationData = {
+        LaboratorioId: parseInt(selectedLabId),
+        Fecha: selectedDate,
+        HoraReserva: selectedStartTime,
+        Motivo: motivos
+    };
+
+    // Mostrar los datos en la consola para depuración
+    console.log('Datos que se enviarán al servidor:', reservationData);
+
+    // Mostrar indicador de carga
+    const submitBtn = document.getElementById('submitBtn');
+    const originalBtnContent = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+    submitBtn.disabled = true;
+
+    // Enviar datos al servidor
+    fetch('/Reservas/CrearReserva', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reservationData)
+    })
+        .then(response => {
+            // Restaurar botón
+            submitBtn.innerHTML = originalBtnContent;
+            submitBtn.disabled = false;
+
+            // --- INICIO DEL CÓDIGO DE DIAGNÓSTICO ---
+            // Verificamos si la respuesta del servidor fue exitosa (código 200-299)
+            if (!response.ok) {
+                // Si no fue exitosa, leemos el cuerpo de la respuesta como TEXTO.
+                // Esto nos mostrará el HTML de la página de error (404, 500, etc.).
+                return response.text().then(htmlError => {
+                    console.error('--- DIAGNÓSTICO: El servidor devolvió un error ---');
+                    console.error('Código de estado:', response.status, response.statusText);
+                    console.error('Contenido HTML recibido:', htmlError);
+                    console.error('---------------------------------------------');
+                    // Lanzamos un error para que se muestre el toast al usuario.
+                    throw new Error(`Error del servidor: ${response.status}`);
+                });
+            }
+            // --- FIN DEL CÓDIGO DE DIAGNÓSTICO ---
+
+            // Si la respuesta fue exitosa, la procesamos como JSON.
+            return response.json();
+        })
+        .then(data => {
+            // Este bloque solo se ejecuta si la respuesta fue exitosa y es JSON válido.
+            if (data.success) {
+                showToast('Reserva Exitosa', `Laboratorio #${selectedLabId} reservado para ${selectedGlobalTime}`, 'success');
+                setTimeout(() => {
+                    closeReservationModal();
+                    resetSelection();
+                }, 2000);
+            } else {
+                showToast('Error', data.message || 'No se pudo realizar la reserva', 'error');
+            }
+        })
+        .catch(error => {
+            // Este bloque maneja cualquier error, incluyendo el que lanzamos arriba.
+            console.error('Error en la petición fetch:', error);
+            showToast('Error', 'Ocurrió un error al procesar la reserva. Revisa la consola para más detalles.', 'error');
+        });
+}
+
+
+// Funciones existentes (mantenerlas sin cambios)
 function updateGlobalTimeSlots() {
     const dateInput = document.getElementById('globalDate');
     const selectedDate = new Date(dateInput.value);
@@ -404,25 +494,6 @@ function openReservationModal() {
 function closeReservationModal() {
     const modal = document.getElementById('reservationModal');
     modal.classList.remove('show');
-}
-
-function handleFormSubmit(e) {
-    e.preventDefault();
-
-    const motivos = document.getElementById('motivos').value.trim();
-    if (!motivos) {
-        showToast('Error', 'Por favor describe el motivo de la reserva', 'error');
-        return;
-    }
-
-    // Simular reserva exitosa
-    showToast('Reserva Exitosa', `Laboratorio #${selectedLabId} reservado para ${selectedGlobalTime}`, 'success');
-
-    // Cerrar modal y resetear después de 2 segundos
-    setTimeout(() => {
-        closeReservationModal();
-        resetSelection();
-    }, 2000);
 }
 
 function resetSelection() {

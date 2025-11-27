@@ -40,5 +40,11 @@ namespace ReservaLaboratorioWilbertMartin.Repository
         {
             return await _context.Laboratorios.ToListAsync();
         }
+
+        public async Task<bool> EstaDisponibleAsync(int laboratorioId, string dia, string hora)
+        {
+                  
+            return await _context.Laboratorios.AnyAsync(l => l.Id == laboratorioId &&  l.dias_ocupado == dia &&  l.horas_ocupado == hora  );
+        }
     }
 }

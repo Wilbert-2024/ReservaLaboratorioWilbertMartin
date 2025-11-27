@@ -9,5 +9,7 @@ namespace ReservaLaboratorioWilbertMartin.Repository
         Task<IEnumerable<Laboratorio>> ObtenerTodosAsync();
         Task ActualizarAsync(Laboratorio laboratorio);
         Task EliminarAsync(int id);
+        Task<bool> EstaDisponibleAsync(int laboratorioId, string dia, string hora);
+
     }
 }
