@@ -1,8 +1,10 @@
-﻿using ReservaLaboratorioWilbertMartin.Dtos;
-using ReservaLaboratorioWilbertMartin.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using ReservaLaboratorioWilbertMartin.Dtos;
+using ReservaLaboratorioWilbertMartin.Services;
+using ReservaLaboratorioWilbertMartin.Dtos;
+using ReservaLaboratorioWilbertMartin.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ReservaLaboratorioWilbertMartin.Controllers
@@ -17,13 +19,12 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             return View();
         }
 
-
         [HttpPost]
-      
+
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
         {
             if (!ModelState.IsValid)
-                 return BadRequest("Hubo un error al guardar");
+                return BadRequest("Hubo un error al guardar");
 
             var (success, error) = await _authService.RegisterAsync(dto);
 
@@ -35,13 +36,13 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
                     Message = error
                 });
             }
-            return Ok(new { success = true });         
+            return Ok(new { success = true });
 
         }
 
         [HttpGet]
-        
-       public IActionResult Login()
+
+        public IActionResult Login()
         {
             var token = Request.Cookies["access_token"];
             if (!string.IsNullOrEmpty(token))
@@ -49,7 +50,7 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
                 // Aquí podrías validar el token también si deseas
                 return RedirectToAction("Index", "Home");
             }
-           return View();
+            return View();
 
         }
 
@@ -66,13 +67,13 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             if (!success)
                 return Unauthorized(new { success = false, errorMessage = error ?? "Credenciales incorrectas." });
 
-                var cookieOptions = new CookieOptions
-                {
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = result.ExpiresAt
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = result.ExpiresAt
 
-                };
+            };
 
             Response.Cookies.Append("access_token", result.AccesToken, cookieOptions);
             Response.Cookies.Append("refresh_token", result.RefreshToken, cookieOptions);
@@ -88,7 +89,8 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
         }
 
         [Authorize]
-         public IActionResult Logout()
+        [HttpPost]
+        public IActionResult Logout()
         {
             Response.Cookies.Delete("access_token");
             Response.Cookies.Delete("refresh_token");
@@ -122,11 +124,11 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
 
         // ===== RECUPERAR CONTRASEÑA  =========
 
-        [HttpGet]       
-        public IActionResult ForgotPassword() => View(); 
+        [HttpGet]
+        public IActionResult ForgotPassword() => View();
 
         //Primer paso para hacer la recuperacion por olvidar password
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto model)
         {
 
@@ -134,19 +136,20 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             {
                 return BadRequest(new { success = false, errorMessage = "El correo es requerido." });
             }
-                        
 
-            var sent = await _authService.SendResetPasswordLinkAsync(model.Email);
 
-            if (sent) {  return Ok(new { success = true }); }
+            var sent = await authService.SendResetPasswordLinkAsync(model.Email);
 
-            else  {    return NotFound(new { success = false, errorMessage = "Correo no encontrado." });   }
+            if (sent) { return Ok(new { success = true }); }
 
-             
+            else { return NotFound(new { success = false, errorMessage = "Correo no encontrado." }); }
+
+
 
         }
 
-        // ===== RESET CONTRASEÑA
+        // ===== RESET CONTRASEÑA 
+
         [HttpGet]
         [AllowAnonymous]
 
@@ -168,7 +171,7 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             if (!ModelState.IsValid)
                 return View(dto);
 
-            var success = await _authService.ResetPasswordAsync(dto);
+            var success = await authService.ResetPasswordAsync(dto);
             if (success)
             {
                 return Ok(new { success = true });
@@ -184,12 +187,12 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
         // === Cambio de contraseña =======
         [Authorize]
         [HttpGet]
-       
+
         public IActionResult ChangePassword() => View();
 
         [Authorize]
         [HttpPost]
-     
+
         public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
         {
             if (!ModelState.IsValid)
@@ -212,7 +215,7 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
 
 
         [HttpPost]
-        
+
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = Request.Cookies["refresh_token"];
@@ -249,12 +252,12 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
         }
 
         [AllowAnonymous]
-   
+
         public IActionResult AccessDenied()
         {
             return View("AccessDenied");
         }
 
-       
+
     }
 }

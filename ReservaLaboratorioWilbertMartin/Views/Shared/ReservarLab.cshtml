@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Laboratorios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/ReservarLab.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Time Selector Section -->
+        <div class="time-selector-section">
+            <div class="time-selector-header">
+                <div class="time-selector-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 600;">Seleccionar Horario</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.8rem;">Ver disponibilidad en todos los laboratorios</p>
+                </div>
+            </div>
+
+            <div class="date-selector">
+                <label for="globalDate" style="font-weight: 500;">Fecha:</label>
+                <input type="date" id="globalDate" class="date-input">
+            </div>
+
+            <div class="global-time-slots" id="globalTimeSlots">
+                <div class="global-time-slot" data-time="08:00-09:30">
+                    <div class="time-info">08:00-09:30</div>
+                    <div class="lab-count">Cargando...</div>
+                </div>
+                <div class="global-time-slot" data-time="09:45-11:15">
+                    <div class="time-info">09:45-11:15</div>
+                    <div class="lab-count">Cargando...</div>
+                </div>
+                <div class="global-time-slot" data-time="13:00-14:30">
+                    <div class="time-info">13:00-14:30</div>
+                    <div class="lab-count">Cargando...</div>
+                </div>
+                <div class="global-time-slot" data-time="14:45-16:15">
+                    <div class="time-info">14:45-16:15</div>
+                    <div class="lab-count">Cargando...</div>
+                </div>
+                <div class="global-time-slot" data-time="18:00-19:30">
+                    <div class="time-info">18:00-19:30</div>
+                    <div class="lab-count">Cargando...</div>
+                </div>
+                <div class="global-time-slot" data-time="19:45-21:15">
+                    <div class="time-info">19:45-21:15</div>
+                    <div class="lab-count">Cargando...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Labs Section -->
+        <div class="labs-section">
+            <div class="section-header">
+                <h2 class="section-title">Laboratorios de Informática</h2>
+                <div class="time-indicator" id="timeIndicator">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Selecciona un horario para ver disponibilidad</span>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="available">Disponibles</button>
+                    <button class="filter-btn" data-filter="occupied">Ocupados</button>
+                </div>
+            </div>
+
+            <div class="labs-grid">
+                <!-- Lab 1 -->
+                <div class="lab-card" data-lab-id="1">
+                    <div class="lab-header">
+                        <h3 class="lab-title">Laboratorio #1</h3>
+                        <div class="lab-status">
+                            <span class="status-dot available"></span>
+                            <span>Disponible</span>
+                        </div>
+                    </div>
+                    <div class="lab-body">
+                        <div class="lab-info">
+                            <div class="info-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>30 Equipos</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-users"></i>
+                                <span>Capacidad: 30</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-wifi"></i>
+                                <span>WiFi: 100 Mbps</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Piso 1 - Aula 101</span>
+                            </div>
+                        </div>
+                        <div class="schedule-preview">
+                            <div class="schedule-title">Horarios del día</div>
+                            <div class="time-slots-preview" id="lab1-slots">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab 2 -->
+                <div class="lab-card" data-lab-id="2">
+                    <div class="lab-header">
+                        <h3 class="lab-title">Laboratorio #2</h3>
+                        <div class="lab-status">
+                            <span class="status-dot available"></span>
+                            <span>Disponible</span>
+                        </div>
+                    </div>
+                    <div class="lab-body">
+                        <div class="lab-info">
+                            <div class="info-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>25 Equipos</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-users"></i>
+                                <span>Capacidad: 25</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-wifi"></i>
+                                <span>WiFi: 100 Mbps</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Piso 1 - Aula 102</span>
+                            </div>
+                        </div>
+                        <div class="schedule-preview">
+                            <div class="schedule-title">Horarios del día</div>
+                            <div class="time-slots-preview" id="lab2-slots">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab 3 -->
+                <div class="lab-card" data-lab-id="3">
+                    <div class="lab-header">
+                        <h3 class="lab-title">Laboratorio #3</h3>
+                        <div class="lab-status">
+                            <span class="status-dot available"></span>
+                            <span>Disponible</span>
+                        </div>
+                    </div>
+                    <div class="lab-body">
+                        <div class="lab-info">
+                            <div class="info-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>35 Equipos</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-users"></i>
+                                <span>Capacidad: 35</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-wifi"></i>
+                                <span>WiFi: 200 Mbps</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Piso 2 - Aula 201</span>
+                            </div>
+                        </div>
+                        <div class="schedule-preview">
+                            <div class="schedule-title">Horarios del día</div>
+                            <div class="time-slots-preview" id="lab3-slots">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab 4 -->
+                <div class="lab-card" data-lab-id="4">
+                    <div class="lab-header">
+                        <h3 class="lab-title">Laboratorio #4</h3>
+                        <div class="lab-status">
+                            <span class="status-dot available"></span>
+                            <span>Disponible</span>
+                        </div>
+                    </div>
+                    <div class="lab-body">
+                        <div class="lab-info">
+                            <div class="info-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>30 Equipos</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-users"></i>
+                                <span>Capacidad: 30</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-wifi"></i>
+                                <span>WiFi: 100 Mbps</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Piso 2 - Aula 202</span>
+                            </div>
+                        </div>
+                        <div class="schedule-preview">
+                            <div class="schedule-title">Horarios del día</div>
+                            <div class="time-slots-preview" id="lab4-slots">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Reserve Button -->
+    <button class="quick-reserve-btn" id="quickReserveBtn" disabled>
+        <i class="fas fa-calendar-plus"></i>
+    </button>
+
+    <!-- Floating Reservation Modal -->
+    <div class="reservation-modal" id="reservationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-calendar-check"></i>
+                    Confirmar Reserva
+                </h3>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="reservation-summary">
+                <div class="summary-title">Detalles de la Reserva</div>
+
+                <div class="summary-item">
+                    <div class="summary-label">
+                        <i class="fas fa-flask"></i>
+                        Laboratorio
+                    </div>
+                    <div class="summary-value" id="summaryLab">-</div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-label">
+                        <i class="fas fa-calendar"></i>
+                        Fecha
+                    </div>
+                    <div class="summary-value" id="summaryDate">-</div>
+                </div>
+
+                <div class="summary-item">
+                    <div class="summary-label">
+                        <i class="fas fa-clock"></i>
+                        Horario
+                    </div>
+                    <div class="summary-value" id="summaryTime">-</div>
+                </div>
+            </div>
+
+            <form id="reservationForm">
+                <div class="form-group">
+                    <label class="form-label">Motivo de la Reserva</label>
+                    <textarea class="form-textarea" id="motivos" placeholder="Describe el propósito de la reserva del laboratorio..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Reserva
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-icon" id="toastIcon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="toast-content">
+            <h4 id="toastTitle">Éxito</h4>
+            <p id="toastMessage">Operación completada correctamente</p>
+        </div>
+    </div>
+
+    <script src="js/ReservarLab"></script>
+</body>
+</html>

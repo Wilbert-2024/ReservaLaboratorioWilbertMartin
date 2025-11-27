@@ -1,0 +1,376 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabManager - Consultas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --available: #10B981;
+            --occupied: #EF4444;
+            --pending: #F59E0B;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border: #E5E7EB;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .reservations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .reservation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reservation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .reservation-card.approved {
+            border-left: 4px solid var(--available);
+        }
+
+        .reservation-card.rejected {
+            border-left: 4px solid var(--occupied);
+        }
+
+        .reservation-card.pending {
+            border-left: 4px solid var(--pending);
+        }
+
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .reservation-code {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .reservation-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--available);
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--occupied);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--pending);
+        }
+
+        .reservation-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .reservation-lab {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .reservation-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .detail-item i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .reservation-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .requested-by {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .approval-info {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .no-results p {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Mis Reservas</h1>
+            <p class="page-subtitle">Consulta el estado de todas tus solicitudes de reserva</p>
+        </div>
+
+        <div class="reservations-grid" id="reservationsGrid">
+            <!-- Las reservas se mostrarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de reservas
+        const reservationsDB = {
+            'RES-2024-001234': {
+                lab: 'Laboratorio #1',
+                date: '2024-01-15',
+                time: '08:00-09:30',
+                motivo: 'Clase de Programación Básica',
+                status: 'approved',
+                requestedBy: 'Juan Pérez',
+                approvedBy: 'Admin Sistema',
+                approvedDate: '2024-01-10'
+            },
+            'RES-2024-001235': {
+                lab: 'Laboratorio #3',
+                date: '2024-01-16',
+                time: '13:00-14:30',
+                motivo: 'Proyecto de Base de Datos',
+                status: 'pending',
+                requestedBy: 'María García',
+                approvedBy: null,
+                approvedDate: null,
+                requestedDate: '2024-01-12'
+            },
+            'RES-2024-001236': {
+                lab: 'Laboratorio #2',
+                date: '2024-01-14',
+                time: '14:45-16:15',
+                motivo: 'Práctica de Redes',
+                status: 'rejected',
+                requestedBy: 'Carlos Rodríguez',
+                approvedBy: 'Admin Sistema',
+                approvedDate: '2024-01-12',
+                rejectionReason: 'Laboratorio en mantenimiento'
+            },
+            'RES-2024-001237': {
+                lab: 'Laboratorio #4',
+                date: '2024-01-17',
+                time: '18:00-19:30',
+                motivo: 'Taller de Software Libre',
+                status: 'approved',
+                requestedBy: 'Ana Martínez',
+                approvedBy: 'Admin Sistema',
+                approvedDate: '2024-01-13'
+            },
+            'RES-2024-001238': {
+                lab: 'Laboratorio #1',
+                date: '2024-01-18',
+                time: '09:45-11:15',
+                motivo: 'Examen Final de Programación',
+                status: 'pending',
+                requestedBy: 'Pedro Sánchez',
+                approvedBy: null,
+                approvedDate: null,
+                requestedDate: '2024-01-17'
+            },
+            'RES-2024-001239': {
+                lab: 'Laboratorio #3',
+                date: '2024-01-19',
+                time: '16:00-17:30',
+                motivo: 'Seminario de Inteligencia Artificial',
+                status: 'approved',
+                requestedBy: 'Laura Torres',
+                approvedBy: 'Admin Sistema',
+                approvedDate: '2024-01-18'
+            }
+        };
+
+        function renderReservations() {
+            const grid = document.getElementById('reservationsGrid');
+            
+            if (Object.keys(reservationsDB).length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No hay reservas</h3>
+                        <p>Aún no has realizado ninguna solicitud de reserva</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = Object.values(reservationsDB).map(reservation => {
+                const statusClass = reservation.status === 'approved' ? 'approved' : 
+                                   reservation.status === 'rejected' ? 'rejected' : 'pending';
+                
+                const statusText = reservation.status === 'approved' ? 'Aprobada' : 
+                                 reservation.status === 'rejected' ? 'Rechazada' : 'Pendiente';
+                
+                let approvalInfo = '';
+                if (reservation.status === 'approved') {
+                    approvalInfo = `
+                        <div class="approval-info">
+                            <p><strong>Aprobado por:</strong> ${reservation.approvedBy}</p>
+                            <p><strong>Fecha de aprobación:</strong> ${formatDate(reservation.approvedDate)}</p>
+                        </div>
+                    `;
+                } else if (reservation.status === 'rejected') {
+                    approvalInfo = `
+                        <div class="approval-info">
+                            <p><strong>Rechazado por:</strong> ${reservation.approvedBy}</p>
+                            <p><strong>Motivo:</strong> ${reservation.rejectionReason}</p>
+                        </div>
+                    `;
+                } else {
+                    approvalInfo = `<p><em>La solicitud está siendo revisada...</em></p>`;
+                }
+                
+                return `
+                    <div class="reservation-card ${statusClass}">
+                        <div class="reservation-header">
+                            <span class="reservation-code">${reservation.id}</span>
+                            <span class="reservation-status status-${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="reservation-body">
+                            <div class="reservation-lab">${reservation.lab}</div>
+                            <div class="reservation-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${formatDate(reservation.date)}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${reservation.time}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>${reservation.requestedBy}</span>
+                                </div>
+                            </div>
+                            <div class="reservation-footer">
+                                <span class="requested-by">Solicitado: ${formatDate(reservation.requestedDate)}</span>
+                                ${approvalInfo}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            renderReservations();
+        });
+    </script>
+</body>
+</html>
