@@ -5,9 +5,7 @@ namespace ReservaLaboratorioWilbertMartin.Models
 {
     [Table("Laboratorios")]
     public class Laboratorio
-    {
-
-        
+    {        
         public int Id { get; set; }
 
         [Required]
