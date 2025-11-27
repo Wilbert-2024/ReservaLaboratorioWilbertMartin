@@ -54,7 +54,7 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
             var currentUserId = GetCurrentUserId();
             var isAdmin = User.IsInRole("Admin");
 
-            if (!isAdmin && reserva.Docente.UserId != currentUserId)
+            if (!isAdmin)
             {
                 // El usuario no es admin y la reserva no le pertenece.
                 return Forbid(); // Devuelve un error 403 Forbidden
@@ -94,7 +94,7 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
                 // La misma lógica de autorización que en la vista
                 var currentUserId = GetCurrentUserId();
                 var isAdmin = User.IsInRole("Admin");
-                if (!isAdmin && reserva.Docente.UserId != currentUserId)
+                if (!isAdmin )
                 {
                     return Forbid(); // Devuelve un 403 Forbidden
                 }

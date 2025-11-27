@@ -28,8 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 // =================== REPOSITORIOS ======================
-builder.Services.AddScoped<IAdministradorRepository, AdministradorRepository>();
-builder.Services.AddScoped<IDocentesRepository, DocentesRepository>();
+
 builder.Services.AddScoped<ILaboratoriosRepository, LaboratoriosRepository>();
 builder.Services.AddScoped<IReservasRepository, ReservasRepository>();
 builder.Services.AddScoped<IRolesRepository, RolesRepository>();
@@ -38,9 +37,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 
 // =================== SERVICIOS ==========================
-builder.Services.AddScoped<IAdministradoresService, AdministradoresService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IDocentesService, DocentesService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ILaboratoriosService, LaboratoriosService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

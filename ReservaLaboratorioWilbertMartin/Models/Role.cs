@@ -13,6 +13,6 @@ namespace ReservaLaboratorioWilbertMartin.Models
         public string Name { get; set; }
 
         // Relación de uno a mucho
-        public virtual ICollection<User> Users { get; set; } = new List<User>();
+        public virtual ICollection<User> Users { get; set; }
     }
 }

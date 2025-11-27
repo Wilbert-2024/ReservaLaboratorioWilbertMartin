@@ -12,8 +12,8 @@ using ReservaLaboratorioWilbertMartin.Data;
 namespace ReservaLaboratorioWilbertMartin.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251126204605_mimgra")]
-    partial class mimgra
+    [Migration("20251126235515_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,48 +24,6 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Administrador", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Administrador");
-                });
-
-            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Docente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Asignatura")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Docentes");
-                });
 
             modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Laboratorio", b =>
                 {
@@ -95,12 +53,6 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AdministradorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DocenteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -119,13 +71,14 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AdministradorId");
-
-                    b.HasIndex("DocenteId");
-
                     b.HasIndex("LaboratorioId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ReservasLaboratorio");
                 });
@@ -155,7 +108,7 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Usuario"
+                            Name = "Docente"
                         });
                 });
 
@@ -207,52 +160,23 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Administrador", b =>
-                {
-                    b.HasOne("ReservaLaboratorioWilbertMartin.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ReservaLaboratorioWilbertMartin.Models.Administrador", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Docente", b =>
-                {
-                    b.HasOne("ReservaLaboratorioWilbertMartin.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ReservaLaboratorioWilbertMartin.Models.Docente", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.ReservaLaboratorio", b =>
                 {
-                    b.HasOne("ReservaLaboratorioWilbertMartin.Models.Administrador", "Administrador")
-                        .WithMany("ReservasAprobadas")
-                        .HasForeignKey("AdministradorId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("ReservaLaboratorioWilbertMartin.Models.Docente", "Docente")
-                        .WithMany("Reservas")
-                        .HasForeignKey("DocenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ReservaLaboratorioWilbertMartin.Models.Laboratorio", "Laboratorio")
                         .WithMany("Reservas")
                         .HasForeignKey("LaboratorioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Administrador");
-
-                    b.Navigation("Docente");
+                    b.HasOne("ReservaLaboratorioWilbertMartin.Models.User", "User")
+                        .WithMany("Reserva")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Laboratorio");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.User", b =>
@@ -266,16 +190,6 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Administrador", b =>
-                {
-                    b.Navigation("ReservasAprobadas");
-                });
-
-            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Docente", b =>
-                {
-                    b.Navigation("Reservas");
-                });
-
             modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Laboratorio", b =>
                 {
                     b.Navigation("Reservas");
@@ -284,6 +198,11 @@ namespace ReservaLaboratorioWilbertMartin.Migrations
             modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.Role", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("ReservaLaboratorioWilbertMartin.Models.User", b =>
+                {
+                    b.Navigation("Reserva");
                 });
 #pragma warning restore 612, 618
         }

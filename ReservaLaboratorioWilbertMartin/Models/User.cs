@@ -31,11 +31,11 @@ namespace ReservaLaboratorioWilbertMartin.Models
 
         public DateTime? ResetTokenExpiryTime { get; set; }
 
-        [ForeignKey("Role")]
+        
         public int RoleId { get; set; }
 
         public virtual Role Role { get; set; }
-
+        public virtual ICollection<ReservaLaboratorio> Reserva { get; set; }
 
 
     }

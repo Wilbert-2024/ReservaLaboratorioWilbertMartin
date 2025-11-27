@@ -7,7 +7,7 @@ namespace ReservaLaboratorioWilbertMartin.Models
     public class Laboratorio
     {
 
-        [Key]
+        
         public int Id { get; set; }
 
         [Required]
@@ -15,7 +15,7 @@ namespace ReservaLaboratorioWilbertMartin.Models
 
         public int Capacidad { get; set; }
 
-        public ICollection<ReservaLaboratorio> Reservas { get; set; } = new List<ReservaLaboratorio>();
+        public ICollection<ReservaLaboratorio> Reservas { get; set; } 
 
     }
 }

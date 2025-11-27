@@ -88,7 +88,6 @@ namespace ReservaLaboratorioWilbertMartin.Controllers
         }
 
         [Authorize]
-        [HttpPost]
          public IActionResult Logout()
         {
             Response.Cookies.Delete("access_token");

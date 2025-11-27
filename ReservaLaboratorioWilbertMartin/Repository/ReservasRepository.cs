@@ -43,14 +43,14 @@ namespace ReservaLaboratorioWilbertMartin.Repository
 
         public async Task<ReservaLaboratorio?> ObtenerConDetallesAsync(int id)
         {
-            return await _context.ReservasLaboratorio.Include(r => r.Docente).ThenInclude(d => d.User).Include(r => r.Laboratorio).Include(r => r.Administrador).ThenInclude(m => m.User).FirstOrDefaultAsync(r => r.Id == id);
+          return await _context.ReservasLaboratorio.Include(r => r.User).Include(r => r.Laboratorio).FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task<IEnumerable<ReservaLaboratorio>> ObtenerPendientesAsync()
         {
             return await _context.ReservasLaboratorio
                 .Where(r => r.Estado == "Pendiente")
-                .Include(r => r.Docente).ThenInclude(d => d.User)
+                .Include(r => r.User)
                 .Include(r => r.Laboratorio)
                 .ToListAsync();
         }
@@ -58,8 +58,7 @@ namespace ReservaLaboratorioWilbertMartin.Repository
         public async Task<IEnumerable<ReservaLaboratorio>> ObtenerPorDocenteIdAsync(int docenteId)
         {
             return await _context.ReservasLaboratorio
-                   .Where(r => r.DocenteId == docenteId)
-                   .Include(r => r.Docente).ThenInclude(d => d.User)
+                   .Where(r => r.UserId == docenteId)
                    .Include(r => r.Laboratorio)
                    .ToListAsync();
         }
@@ -71,8 +70,8 @@ namespace ReservaLaboratorioWilbertMartin.Repository
 
         public async Task<IEnumerable<ReservaLaboratorio>> ObtenerTodasAsync()
         {
-            return await _context.ReservasLaboratorio.Include(r => r.Docente).ThenInclude(d => d.User).Include(r => r.Laboratorio)
-                 .Include(r => r.Administrador).ThenInclude(m => m.User).ToListAsync();
+            return await _context.ReservasLaboratorio.Include(r => r.User).Include(r => r.Laboratorio)
+                 .ToListAsync();
 
         }
     }
